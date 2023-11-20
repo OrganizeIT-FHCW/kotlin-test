@@ -1,4 +1,8 @@
-# SOURCETREE TEST
+Run Desktop App:
+
+```
+./gradlew :composeApp:run
+```
 
 This is a Kotlin Multiplatform project targeting Android, iOS, Desktop.
 
