@@ -1,5 +1,3 @@
-# Source: https://chat.openai.com - 24. November 2023, 13:09 Uhr
-
 name: Issue Workflow
 
 on:
@@ -26,23 +24,25 @@ jobs:
         # Check if the issue is mentioned in a commit
         if git log --pretty=%B | grep -i "closes #$ISSUE_NUMBER" || git log --pretty=%B | grep -i "fixes #$ISSUE_NUMBER" || git log --pretty=%B | grep -i "#$ISSUE_NUMBER"; then
           echo "Issue mentioned in commit. Setting status to 'in Progress'."
-          # Set issue status to "in Progress"
-          curl -X PATCH \
-            -H "Accept: application/vnd.github.v3+json" \
+
+          # Move the card to another column (replace PROJECT_ID and COLUMN_ID)
+          curl -X POST \
+            -H "Accept: application/vnd.github.inertia-preview+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
-            https://api.github.com/repos/OrganizeIT-FHCW/kotlin-test/issues/${ISSUE_NUMBER} \
-            -d '{"state":"in_progress"}'
+            https://api.github.com/projects/3/moves \
+            -d '{"position":"bottom","column_id":"4","card_id":"$ISSUE_NUMBER"}'
         fi
         
         # Check if the issue is linked to a pull request
         if gh pr view $ISSUE_NUMBER; then
           echo "Issue linked to pull request. Setting status to 'in Review'."
-          # Set issue status to "in Review"
-          curl -X PATCH \
-            -H "Accept: application/vnd.github.v3+json" \
+
+          # Move the card to another column (replace PROJECT_ID and COLUMN_ID)
+          curl -X POST \
+            -H "Accept: application/vnd.github.inertia-preview+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
-            https://api.github.com/repos/OrganizeIT-FHCW/kotlin-test/issues/${ISSUE_NUMBER} \
-            -d '{"state":"in_review"}'
+            https://api.github.com/projects/3/moves \
+            -d '{"position":"bottom","column_id":"5","card_id":"$ISSUE_NUMBER"}'
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
