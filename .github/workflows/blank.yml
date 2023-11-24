@@ -27,7 +27,7 @@ jobs:
         echo "Project ID: $PROJECT_ID"
       id: project
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.WorkflowToken }}
 
     - name: Get Column ID
       run: |
