@@ -24,7 +24,7 @@ jobs:
         ISSUE_NUMBER=$(echo "$GITHUB_REF" | awk -F/ '{print $NF}')
         
         # Check if the issue is mentioned in a commit
-        if git log --pretty=%B | grep -i "closes #$ISSUE_NUMBER" || git log --pretty=%B | grep -i "fixes #$ISSUE_NUMBER"; then
+        if git log --pretty=%B | grep -i "closes #$ISSUE_NUMBER" || git log --pretty=%B | grep -i "fixes #$ISSUE_NUMBER" || git log --pretty=%B | grep -i "#$ISSUE_NUMBER"; then
           echo "Issue mentioned in commit. Setting status to 'in Progress'."
           # Set issue status to "in Progress"
           curl -X PATCH \
