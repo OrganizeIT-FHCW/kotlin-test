@@ -1,0 +1,48 @@
+# Source: https://chat.openai.com - 24. November 2023, 13:09 Uhr
+
+name: Issue Workflow
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+      - '*'
+
+jobs:
+  process_issue:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Set issue status based on commit or pull request
+      run: |
+        ISSUE_NUMBER=$(echo "$GITHUB_REF" | awk -F/ '{print $NF}')
+        
+        # Check if the issue is mentioned in a commit
+        if git log --pretty=%B | grep -i "closes #$ISSUE_NUMBER" || git log --pretty=%B | grep -i "fixes #$ISSUE_NUMBER"; then
+          echo "Issue mentioned in commit. Setting status to 'in Progress'."
+          # Set issue status to "in Progress"
+          curl -X PATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            https://api.github.com/repos/OrganizeIT-FHCW/OrganizeIT/issues/${ISSUE_NUMBER} \
+            -d '{"state":"in_progress"}'
+        fi
+        
+        # Check if the issue is linked to a pull request
+        if gh pr view $ISSUE_NUMBER; then
+          echo "Issue linked to pull request. Setting status to 'in Review'."
+          # Set issue status to "in Review"
+          curl -X PATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            https://api.github.com/repos/OrganizeIT-FHCW/OrganizeIT/issues/${ISSUE_NUMBER} \
+            -d '{"state":"in_review"}'
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
