@@ -38,4 +38,4 @@ jobs:
       id: column
       env:
         PROJECT_ID: ${{ steps.project.outputs.project_id }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.WorkflowToken }}
