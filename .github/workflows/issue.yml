@@ -45,4 +45,4 @@ jobs:
             -d '{"position":"bottom","column_id":"5","card_id":"$ISSUE_NUMBER"}'
         fi
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.WorkflowToken }}
