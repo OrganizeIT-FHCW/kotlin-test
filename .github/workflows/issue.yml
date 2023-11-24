@@ -30,7 +30,7 @@ jobs:
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
-            https://api.github.com/repos/OrganizeIT-FHCW/OrganizeIT/issues/${ISSUE_NUMBER} \
+            https://api.github.com/repos/OrganizeIT-FHCW/kotlin-test/issues/${ISSUE_NUMBER} \
             -d '{"state":"in_progress"}'
         fi
         
@@ -41,7 +41,7 @@ jobs:
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
-            https://api.github.com/repos/OrganizeIT-FHCW/OrganizeIT/issues/${ISSUE_NUMBER} \
+            https://api.github.com/repos/OrganizeIT-FHCW/kotlin-test/issues/${ISSUE_NUMBER} \
             -d '{"state":"in_review"}'
         fi
       env:
