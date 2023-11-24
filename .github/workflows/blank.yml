@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Get Project ID
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+      - '*'
+
+jobs:
+  process_issue:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Get Project ID
+      run: |
+        PROJECT_ID=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+                      -H "Accept: application/vnd.github.inertia-preview+json" \
+                      https://api.github.com/repos/OrganizeIT-FHCW/OrganizeIT/projects | jq '.[0].id')
+        echo "Project ID: $PROJECT_ID"
+      id: project
+
+    - name: Get Column ID
+      run: |
+        COLUMN_ID=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+                     -H "Accept: application/vnd.github.inertia-preview+json" \
+                     https://api.github.com/projects/${{ steps.project.outputs.project_id }}/columns | jq '.[0].id')
+        echo "Column ID: $COLUMN_ID"
+      id: column
+      env:
+        PROJECT_ID: ${{ steps.project.outputs.project_id }}
+    env:
+     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
